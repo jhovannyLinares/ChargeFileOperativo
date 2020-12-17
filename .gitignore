@@ -1,0 +1,12 @@
+
+target/
+
+logs/
+
+.settings/
+
+.classpath
+
+.project
+
+src/main/java/mx/gob/bienestar/file/operativo/persistencia/config/Pool.java
