@@ -5,21 +5,20 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.HashMap;
 
-//import org.apache.logging.log4j.LogManager;
-//import org.apache.logging.log4j.Logger;
+import org.apache.log4j.Logger;
 
 import mx.gob.bienestar.file.operativo.persistencia.config.Pool;
 
 public class CatalogoDAO {
 
-	//private static final Logger logger = LogManager.getLogger(CatalogoDAO.class);
+	static Logger logger = Logger.getLogger(CatalogoDAO.class.getName());
 
 	public HashMap<String, HashMap<String, HashMap<Integer, Boolean>>> getEntidadesMunicipio(String entidad,
 			HashMap<String, HashMap<String, HashMap<Integer, Boolean>>> entidadesMunicipio) {
 
 		String sql = "SELECT ID_ENTIDAD_FEDERATIVA FROM CAT_ENTIDAD_FEDERATIVA WHERE ID_ENTIDAD_FEDERATIVA = "
 				+ entidad;
-		System.out.println( sql);
+		logger.debug( sql);
 		try (Statement stmt = Pool.createStatement()) {
 
 			ResultSet rs = stmt.executeQuery(sql);
@@ -28,7 +27,7 @@ public class CatalogoDAO {
 			}
 
 		} catch (SQLException e) {
-			System.out.println( "Error en la ejecucion del Query");
+			logger.debug( "Error en la ejecucion del Query");
 		}
 
 		return entidadesMunicipio;
@@ -41,7 +40,7 @@ public class CatalogoDAO {
 		String sql = "select ID_ENTIDAD_FEDERATIVA, ID_REGION from cat_region where ID_ENTIDAD_FEDERATIVA = '" + entidad
 				+ "' ";
 
-		System.out.println( sql);
+		logger.debug( sql);
 		try (Statement stmt = Pool.createStatement()) {
 
 			ResultSet rs = stmt.executeQuery(sql);
@@ -60,7 +59,7 @@ public class CatalogoDAO {
 			}
 
 		} catch (SQLException e) {
-			System.out.println( "Error en la ejecucion del Query");
+			logger.debug( "Error en la ejecucion del Query");
 		}
 
 		return regiones;
@@ -73,7 +72,7 @@ public class CatalogoDAO {
 		String sql = "SELECT ID_INEGI FROM CAT_LOCALIDAD WHERE ID_ENTIDAD_FEDERATIVA = '" + entidad
 				+ "' AND ID_MUNICIPIO = '" + municipio + "'";
 
-		System.out.println( sql);
+		logger.debug( sql);
 		try (Statement stmt = Pool.createStatement()) {
 
 			ResultSet rs = stmt.executeQuery(sql);
@@ -83,7 +82,7 @@ public class CatalogoDAO {
 			}
 
 		} catch (SQLException e) {
-			System.out.println( "Error en la ejecucion del Query");
+			logger.debug( "Error en la ejecucion del Query");
 		}
 
 		return municipios;
@@ -96,7 +95,7 @@ public class CatalogoDAO {
 
 		HashMap<String, Boolean> tarjetas = new HashMap<String, Boolean>();
 
-		System.out.println( sql);
+		logger.debug( sql);
 		try (Statement stmt = Pool.createStatement()) {
 
 			ResultSet rs = stmt.executeQuery(sql);
@@ -106,7 +105,7 @@ public class CatalogoDAO {
 			}
 
 		} catch (SQLException e) {
-			System.out.println( "Error en la ejecucion del Query");
+			logger.debug( "Error en la ejecucion del Query");
 		}
 
 		return tarjetas;
@@ -116,7 +115,7 @@ public class CatalogoDAO {
 
 		String sql = "SELECT ID_ENTIDAD_FEDERATIVA FROM CAT_ENTIDAD_FEDERATIVA";
 
-		System.out.println( sql);
+		logger.debug( sql);
 		try (Statement stmt = Pool.createStatement()) {
 
 			ResultSet rs = stmt.executeQuery(sql);
@@ -127,7 +126,7 @@ public class CatalogoDAO {
 			}
 
 		} catch (SQLException e) {
-			System.out.println( "Error en la ejecucion del Query");
+			logger.debug( "Error en la ejecucion del Query");
 		}
 
 		return entidades;
@@ -139,7 +138,7 @@ public class CatalogoDAO {
 		String sql = "SELECT ID_ENTIDAD_FEDERATIVA,ID_MUNICIPIO FROM CAT_MUNICIPIO WHERE ID_ENTIDAD_FEDERATIVA = '"
 				+ entidad + "'";
 
-		System.out.println( sql);
+		logger.debug( sql);
 		try (Statement stmt = Pool.createStatement()) {
 
 			ResultSet rs = stmt.executeQuery(sql);
@@ -157,7 +156,7 @@ public class CatalogoDAO {
 			}
 
 		} catch (SQLException e) {
-			System.out.println( "Error en la ejecucion del Query");
+			logger.debug( "Error en la ejecucion del Query");
 		}
 
 		return entidadesMunicipios;
@@ -169,7 +168,7 @@ public class CatalogoDAO {
 
 		HashMap<String, Boolean> padrones = new HashMap<String, Boolean>();
 
-		System.out.println( sql);
+		logger.debug( sql);
 		try (Statement stmt = Pool.createStatement()) {
 
 			ResultSet rs = stmt.executeQuery(sql);
@@ -179,7 +178,7 @@ public class CatalogoDAO {
 			}
 
 		} catch (SQLException e) {
-			System.out.println( "Error en la ejecucion del Query");
+			logger.debug( "Error en la ejecucion del Query");
 		}
 
 		return padrones;
@@ -189,7 +188,7 @@ public class CatalogoDAO {
 		
 		String sql = "SELECT ID_OPERATIVO, CLAVE_OPERATIVO FROM OPERATIVO";
 
-		System.out.println( sql);
+		logger.debug( sql);
 		try (Statement stmt = Pool.createStatement()) {
 
 			ResultSet rs = stmt.executeQuery(sql);
@@ -200,7 +199,7 @@ public class CatalogoDAO {
 			}
 
 		} catch (SQLException e) {
-			System.out.println( "Error en la ejecucion del Query");
+			logger.debug( "Error en la ejecucion del Query");
 		}
 
 		return operativos;

@@ -1,14 +1,13 @@
 package mx.gob.bienestar.file.operativo.negocio.servicio.impl;
 
-//import org.apache.logging.log4j.LogManager;
-//import org.apache.logging.log4j.Logger;
+import org.apache.log4j.Logger;
 
 import mx.gob.bienestar.file.operativo.persistencia.dao.RegistroDAO;
 import mx.gob.bienestar.file.operativo.persistencia.entity.Registro;
 
 public class RegistroService {
 
-	//private static final Logger logger = LogManager.getLogger(RegistroService.class);
+	Logger logger = Logger.getLogger(this.getClass());
 
 	private static final String tab = "\t";
 	private static final String comma = ",";
@@ -30,11 +29,14 @@ public class RegistroService {
 				registros = limpieza(registros);
 
 				long startTime = System.currentTimeMillis();
+
 				if (correcto(index, registros)) {
-					System.out.println("Validaciones: " + (System.currentTimeMillis() - startTime));
-					startTime = System.currentTimeMillis();
-					save(registros);
-					System.out.println("guardado: " + (System.currentTimeMillis() - startTime));
+
+//					logger.debug("Validaciones: " + (System.currentTimeMillis() - startTime));
+//					startTime = System.currentTimeMillis();
+//					save(registros);
+//					logger.debug("guardado: " + (System.currentTimeMillis() - startTime));n
+					SaveTemporal(registros, registro);
 				}
 
 			} catch (Exception e) {
@@ -47,6 +49,11 @@ public class RegistroService {
 
 		}
 
+	}
+
+	private void SaveTemporal(String[] registros, int numRegistro) {
+		Registro registro = asingacion(registros);
+		dao.saveTemporal(registro, numRegistro);
 	}
 
 	private String[] limpieza(String[] registros) {
@@ -63,53 +70,20 @@ public class RegistroService {
 	}
 
 	private boolean correcto(Integer index, String[] registros) throws Exception {
-
 		boolean correcto = false;
-
 		long startTime = System.currentTimeMillis();
 		if (validaOperativo(index, registros[0])) {
-			System.out.println("validaOperativo: " + (System.currentTimeMillis() - startTime));
+			logger.debug("validaOperativo: " + (System.currentTimeMillis() - startTime));
 			startTime = System.currentTimeMillis();
 			if (validaEntidad(registros[25])) {
-				System.out.println("ValidaciovalidaEntidadnes: " + (System.currentTimeMillis() - startTime));
-				startTime = System.currentTimeMillis();
-				if (validaMunicipio(registros[25], registros[26])) {
-					System.out.println("validaMunicipio: " + (System.currentTimeMillis() - startTime));
-					startTime = System.currentTimeMillis();
-					if (validaRegion(registros[25], registros[13])) {
-						System.out.println("validaRegion: " + (System.currentTimeMillis() - startTime));
-						startTime = System.currentTimeMillis();
-						if (validaLocalidadInegi(registros[25], registros[26], registros[12])) {
-							System.out.println("validaLocalidadInegi: " + (System.currentTimeMillis() - startTime));
-							startTime = System.currentTimeMillis();
-							if (validaTarjeta(registros[24])) {
-								System.out.println("validaTarjeta: " + (System.currentTimeMillis() - startTime));
-								startTime = System.currentTimeMillis();
-								if (validaPadron(registros[1], registros[27])) {
-									System.out.println("validaPadron: " + (System.currentTimeMillis() - startTime));
-									correcto = true;
-								} else {
-									throw new Exception("El Beneficiario ya cuenta con tarjeta " + registros[1]);
-								}
-							} else {
-								throw new Exception("La tarjeta ya se encuentra registrada " + registros[24]);
-							}
-						} else {
-							throw new Exception("LocalidadInegi no localizada " + registros[12]);
-						}
-					} else {
-						throw new Exception("Region no localizada " + registros[13]);
-					}
-				} else {
-					throw new Exception("Municipio no localizado " + registros[26]);
-				}
+				logger.debug("ValidaciovalidaEntidadnes: " + (System.currentTimeMillis() - startTime));
+				correcto = true;
 			} else {
 				throw new Exception("Entidad no localizada " + registros[25]);
 			}
 		} else {
 			throw new Exception("El Operativo no corresponde al definido " + registros[0]);
 		}
-
 		return correcto;
 	}
 
@@ -258,6 +232,39 @@ public class RegistroService {
 
 		dao.save(reg);
 
+	}
+
+	private Registro asingacion(String[] registros) {
+		Registro registro = new Registro();
+		registro.setOPERATIVO(registros[0]);
+		registro.setID_PADRON(registros[1]);
+		registro.setID_PROGRAMA_SOCIAL(registros[2]);
+		registro.setTITULAR_A_PATERNO(registros[3]);
+		registro.setTITULAR_A_MATERNO(registros[4]);
+		registro.setTITULAR_NOMBRE(registros[5]);
+		registro.setTITULAR_CURP(registros[6]);
+		registro.setREGISTRO_AUXILIAR(registros[7]);
+		registro.setAUX_A_PATERNO(registros[8]);
+		registro.setAUX_A_MATERNO(registros[9]);
+		registro.setAUX_NOMBRE(registros[10]);
+		registro.setAUX_CURP(registros[11]);
+		registro.setID_LOCALIDAD_INEGI(registros[12]);
+		registro.setID_REGION(registros[13]);
+		registro.setLOCALIDADID(registros[14]);
+		registro.setCOLONIA(registros[15]);
+		registro.setCALLE(registros[16]);
+		registro.setAREA(registros[17]);
+		registro.setNUMERO_EXTERNO(registros[18]);
+		registro.setNUMERO_INTERIOR(registros[19]);
+		registro.setMANZANA(registros[20]);
+		registro.setLOTE(registros[21]);
+		registro.setCODIGO_POSTAL(registros[22]);
+		registro.setID_ACUSE(registros[23]);
+		registro.setTARJETAID(registros[24]);
+		registro.setID_ENTIDAD_FEDERATIVA(registros[25]);
+		registro.setID_MUNICIPIO(registros[26]);
+		registro.setREPOSICION(registros[27]);
+		return registro;
 	}
 
 }
